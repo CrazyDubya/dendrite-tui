@@ -1,0 +1,29 @@
+[project]
+name = "dendrite"
+version = "0.1.0"
+description = "A TUI for growing ideas through time - trees, branches, context, now and then"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "textual>=0.85.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "textual-dev>=1.0.0",
+]
+llm = [
+    "httpx>=0.25.0",
+]
+all = [
+    "textual-dev>=1.0.0",
+    "httpx>=0.25.0",
+]
+
+[project.scripts]
+dendrite = "dendrite.app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
