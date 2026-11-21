@@ -371,15 +371,15 @@ class ContextInputWidget(Static):
         super().__init__(**kwargs)
         self._hint = "Welcome to Dendrite. Press 'n' to plant a new seed."
         self._mode = "normal"
-        self._render()
+        self._update_hint()
 
     def set_hint(self, hint: str, mode: str = "normal") -> None:
         """Set the contextual hint."""
         self._hint = hint
         self._mode = mode
-        self._render()
+        self._update_hint()
 
-    def _render(self) -> None:
+    def _update_hint(self) -> None:
         text = Text()
 
         mode_styles = {
@@ -406,9 +406,9 @@ class StatsBar(Static):
     def set_stats(self, stats: dict[str, int]) -> None:
         """Update the stats display."""
         self._stats = stats
-        self._render()
+        self._update_stats()
 
-    def _render(self) -> None:
+    def _update_stats(self) -> None:
         text = Text()
 
         icons = {
