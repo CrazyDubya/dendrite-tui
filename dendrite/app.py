@@ -5,6 +5,7 @@ import asyncio
 from pathlib import Path
 from typing import Optional
 
+from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Horizontal, Vertical, ScrollableContainer
@@ -622,6 +623,7 @@ class DendriteApp(App):
     # Actions - Core
     # -------------------------------------------------------------------------
 
+    @work
     async def action_new_seed(self) -> None:
         """Plant a new seed (root-level idea)."""
         content = await self.push_screen_wait(
@@ -639,6 +641,7 @@ class DendriteApp(App):
             self._update_context_hint(f"Planted: {content[:30]}…", "success")
             self._auto_save()
 
+    @work
     async def action_branch(self) -> None:
         """Create a branch from the selected node."""
         node, node_id = self._get_selected_node()
@@ -658,6 +661,7 @@ class DendriteApp(App):
             self._update_context_hint(f"Branched: {content[:30]}…", "success")
             self._auto_save()
 
+    @work
     async def action_edit(self) -> None:
         """Edit the selected node."""
         node, node_id = self._get_selected_node()
@@ -705,6 +709,7 @@ class DendriteApp(App):
         self._update_context_hint(f"Now {new_state.value}: {node.content[:30]}…", "success")
         self._auto_save()
 
+    @work
     async def action_grow(self) -> None:
         """Cycle through growth states."""
         node, _ = self._get_selected_node()
@@ -716,10 +721,12 @@ class DendriteApp(App):
             else:
                 await self._change_state(NodeState.GROWING, "reviv")
 
+    @work
     async def action_prune(self) -> None:
         """Mark a node as pruned."""
         await self._change_state(NodeState.PRUNED, "prun")
 
+    @work
     async def action_dormant(self) -> None:
         """Mark a node as dormant."""
         await self._change_state(NodeState.DORMANT, "pause")
@@ -821,6 +828,7 @@ class DendriteApp(App):
     # Actions - Filtering
     # -------------------------------------------------------------------------
 
+    @work
     async def action_search(self) -> None:
         """Open search modal."""
         query = await self.push_screen_wait(SearchModal())
