@@ -1,0 +1,237 @@
+{
+  "__class__": "Forest",
+  "trees": {
+    "0ed037d0": {
+      "id": "0ed037d0",
+      "name": "My Ideas",
+      "nodes": {
+        "d3db637f": {
+          "id": "d3db637f",
+          "content": "TUI Framework Ideas",
+          "state": {
+            "__nodestate__": "growing"
+          },
+          "parent_id": null,
+          "children_ids": [
+            "74119d76",
+            "1f63df33",
+            "89ca1c4f"
+          ],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707419"
+              },
+              "action": "created",
+              "content_snapshot": "TUI Framework Ideas",
+              "context": "Starting to think about terminal interfaces"
+            },
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707425"
+              },
+              "action": "state:growing",
+              "content_snapshot": "TUI Framework Ideas",
+              "context": ""
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707417"
+          },
+          "tags": []
+        },
+        "74119d76": {
+          "id": "74119d76",
+          "content": "Tree-based navigation",
+          "state": {
+            "__nodestate__": "sprouting"
+          },
+          "parent_id": "d3db637f",
+          "children_ids": [
+            "4ce5db95",
+            "0d1f84e0"
+          ],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707431"
+              },
+              "action": "created",
+              "content_snapshot": "Tree-based navigation",
+              "context": "Everything is a tree - files, ideas, time"
+            },
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707434"
+              },
+              "action": "state:sprouting",
+              "content_snapshot": "Tree-based navigation",
+              "context": ""
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707431"
+          },
+          "tags": []
+        },
+        "4ce5db95": {
+          "id": "4ce5db95",
+          "content": "Collapsible branches like lazygit",
+          "state": {
+            "__nodestate__": "seed"
+          },
+          "parent_id": "74119d76",
+          "children_ids": [],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707439"
+              },
+              "action": "created",
+              "content_snapshot": "Collapsible branches like lazygit",
+              "context": "Users love the lazygit UX"
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707438"
+          },
+          "tags": []
+        },
+        "0d1f84e0": {
+          "id": "0d1f84e0",
+          "content": "Keyboard-driven with vim bindings",
+          "state": {
+            "__nodestate__": "seed"
+          },
+          "parent_id": "74119d76",
+          "children_ids": [],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707444"
+              },
+              "action": "created",
+              "content_snapshot": "Keyboard-driven with vim bindings",
+              "context": "Our users live in the terminal"
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707443"
+          },
+          "tags": []
+        },
+        "1f63df33": {
+          "id": "1f63df33",
+          "content": "Temporal awareness",
+          "state": {
+            "__nodestate__": "sprouting"
+          },
+          "parent_id": "d3db637f",
+          "children_ids": [
+            "57a7eb16"
+          ],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707447"
+              },
+              "action": "created",
+              "content_snapshot": "Temporal awareness",
+              "context": "Time is a first-class concept"
+            },
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707449"
+              },
+              "action": "state:sprouting",
+              "content_snapshot": "Temporal awareness",
+              "context": ""
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707447"
+          },
+          "tags": []
+        },
+        "57a7eb16": {
+          "id": "57a7eb16",
+          "content": "Show history as a timeline",
+          "state": {
+            "__nodestate__": "seed"
+          },
+          "parent_id": "1f63df33",
+          "children_ids": [],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707453"
+              },
+              "action": "created",
+              "content_snapshot": "Show history as a timeline",
+              "context": "Every change should be visible"
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707452"
+          },
+          "tags": []
+        },
+        "89ca1c4f": {
+          "id": "89ca1c4f",
+          "content": "Context capture",
+          "state": {
+            "__nodestate__": "seed"
+          },
+          "parent_id": "d3db637f",
+          "children_ids": [
+            "7545cb32"
+          ],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707457"
+              },
+              "action": "created",
+              "content_snapshot": "Context capture",
+              "context": "Why did I think this? I always forget"
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707456"
+          },
+          "tags": []
+        },
+        "7545cb32": {
+          "id": "7545cb32",
+          "content": "Prompt for context on each action",
+          "state": {
+            "__nodestate__": "seed"
+          },
+          "parent_id": "89ca1c4f",
+          "children_ids": [],
+          "history": [
+            {
+              "timestamp": {
+                "__datetime__": "2026-11-21T10:35:34.707461"
+              },
+              "action": "created",
+              "content_snapshot": "Prompt for context on each action",
+              "context": "Make it optional but encouraged"
+            }
+          ],
+          "created_at": {
+            "__datetime__": "2026-11-21T10:35:34.707461"
+          },
+          "tags": []
+        }
+      },
+      "root_ids": [
+        "d3db637f"
+      ],
+      "created_at": {
+        "__datetime__": "2026-11-21T10:35:34.707405"
+      }
+    }
+  },
+  "active_tree_id": "0ed037d0"
+}
