@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import asdict
+from dataclasses import fields
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -19,52 +19,77 @@ class DendriteEncoder(json.JSONEncoder):
         if isinstance(obj, NodeState):
             return {"__nodestate__": obj.value}
         if isinstance(obj, (Forest, Tree, Node, Moment)):
-            return {"__class__": type(obj).__name__, **asdict(obj)}
+            return {"__class__": type(obj).__name__, **{field.name: getattr(obj, field.name) for field in fields(obj)}}
         return super().default(obj)
 
 
+def _restore_record(value: Any, cls: type) -> Any:
+    """Restore the untagged nested records written by the original encoder."""
+    if isinstance(value, cls):
+        return value
+    if not isinstance(value, dict):
+        raise ValueError(f"Expected {cls.__name__} record")
+    allowed = {field.name for field in fields(cls)}
+    if set(value) - allowed:
+        raise ValueError(f"Unknown {cls.__name__} fields")
+    optional = {Moment: {"context"}, Node: {"tags"}}.get(cls, set())
+    if (allowed - optional) - set(value):
+        raise ValueError(f"Missing {cls.__name__} fields")
+    data = dict(value)
+    try:
+        if cls is Forest:
+            if not isinstance(data["trees"], dict):
+                raise ValueError("Expected tree mapping")
+            data["trees"] = {key: _restore_record(tree, Tree)
+                             for key, tree in data["trees"].items()}
+        elif cls is Tree:
+            if not isinstance(data["nodes"], dict):
+                raise ValueError("Expected node mapping")
+            data["nodes"] = {key: _restore_record(node, Node)
+                             for key, node in data["nodes"].items()}
+        elif cls is Node:
+            if not isinstance(data["history"], list):
+                raise ValueError("Expected history list")
+            data["history"] = [_restore_record(moment, Moment)
+                               for moment in data["history"]]
+        record = cls(**data)
+    except (KeyError, TypeError) as exc:
+        raise ValueError(f"Invalid {cls.__name__} record") from exc
+    checks = {
+        Forest: {"trees": dict, "active_tree_id": (str, type(None))},
+        Tree: {"id": str, "name": str, "nodes": dict, "root_ids": list,
+               "created_at": datetime},
+        Node: {"id": str, "content": str, "state": NodeState,
+               "parent_id": (str, type(None)), "children_ids": list,
+               "history": list, "created_at": datetime, "tags": list},
+        Moment: {"timestamp": datetime, "action": str,
+                 "content_snapshot": str, "context": str},
+    }
+    for name, expected in checks[cls].items():
+        if not isinstance(getattr(record, name), expected):
+            raise ValueError(f"Invalid {cls.__name__}.{name}")
+    for name in ("root_ids", "children_ids", "tags"):
+        if hasattr(record, name) and not all(isinstance(item, str)
+                                             for item in getattr(record, name)):
+            raise ValueError(f"Invalid {cls.__name__}.{name}")
+    for name in ("trees", "nodes"):
+        if hasattr(record, name) and not all(isinstance(key, str)
+                                             for key in getattr(record, name)):
+            raise ValueError(f"Invalid {cls.__name__}.{name} keys")
+    return record
+
+
 def dendrite_decoder(dct: dict) -> Any:
-    """Custom JSON decoder for Dendrite objects."""
+    """Decode new tagged records and the original nested untagged format."""
     if "__datetime__" in dct:
         return datetime.fromisoformat(dct["__datetime__"])
     if "__nodestate__" in dct:
         return NodeState(dct["__nodestate__"])
-    if "__class__" in dct:
-        class_name = dct.pop("__class__")
-        if class_name == "Moment":
-            return Moment(
-                timestamp=dct["timestamp"],
-                action=dct["action"],
-                content_snapshot=dct["content_snapshot"],
-                context=dct.get("context", "")
-            )
-        elif class_name == "Node":
-            node = Node(
-                id=dct["id"],
-                content=dct["content"],
-                state=dct["state"],
-                parent_id=dct["parent_id"],
-                children_ids=dct["children_ids"],
-                history=dct["history"],
-                created_at=dct["created_at"],
-                tags=dct.get("tags", [])
-            )
-            return node
-        elif class_name == "Tree":
-            tree = Tree(
-                id=dct["id"],
-                name=dct["name"],
-                nodes=dct["nodes"],
-                root_ids=dct["root_ids"],
-                created_at=dct["created_at"]
-            )
-            return tree
-        elif class_name == "Forest":
-            forest = Forest(
-                trees=dct["trees"],
-                active_tree_id=dct["active_tree_id"]
-            )
-            return forest
+    classes = {cls.__name__: cls for cls in (Forest, Tree, Node, Moment)}
+    cls = classes.get(dct.get("__class__"))
+    if cls is not None:
+        return _restore_record({key: value for key, value in dct.items()
+                                if key != "__class__"}, cls)
     return dct
 
 
