@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from dataclasses import fields
 from datetime import datetime
 from pathlib import Path
@@ -110,8 +112,21 @@ class Storage:
     def save(self, forest: Forest, filename: str | None = None) -> Path:
         """Save a forest to disk."""
         path = self._get_path(filename)
-        with open(path, "w") as f:
-            json.dump(forest, f, cls=DendriteEncoder, indent=2)
+        # Write to a temp file in the same directory and swap it in, so a failed
+        # or interrupted save leaves the previous file intact.
+        fd, tmp_name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w") as f:
+                json.dump(forest, f, cls=DendriteEncoder, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_name, path)
+        except BaseException:
+            try:
+                os.unlink(tmp_name)
+            except FileNotFoundError:
+                pass
+            raise
         return path
 
     def load(self, filename: str | None = None) -> Forest | None:
